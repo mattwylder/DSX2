@@ -42,6 +42,7 @@ public class TickerPublisher implements Publisher {
 		Iterator<User> itr = publisher.getSubscriptions().get(product)
 				.iterator();
 		char direction = NO_PREVIOUS_VALUE;
+		System.out.println("Previous value: " + lastSales.containsValue(product));
 		if (lastSales.containsValue(product)) {
 			Price lastSale;
 			lastSale = lastSales.get(product);
