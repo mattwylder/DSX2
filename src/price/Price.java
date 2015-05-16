@@ -7,7 +7,7 @@ public class Price {
 
 	//CONSTRUCTORS
 	protected Price(){
-		this.value = 0; //TODO: idk
+		this.value = 0; 
 	}
 	protected Price(long value){
 		this.value = value;

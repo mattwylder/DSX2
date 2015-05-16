@@ -5,16 +5,16 @@ import price.Price;
 
 public class TradableDTO implements Tradable {
 
-	String userName;
-	String product;
-	String id;
-	Price price;
-	int originalVolume;
-	int remainingVolume;
-	int cancelledVolume;
-	long time = System.nanoTime();
-	String side;
-	boolean quote;
+	public String userName;
+	public String product;
+	public String id;
+	public Price price;
+	public int originalVolume;
+	public int remainingVolume;
+	public int cancelledVolume;
+	public long time = System.nanoTime();
+	public String side;
+	public boolean quote;
 	
 	public TradableDTO(String prdct, Price p, int oVolume, int rVolume,
             int cVolume, String user, String bSide, boolean quoted, String i){
@@ -26,9 +26,7 @@ public class TradableDTO implements Tradable {
 		userName = user;
 		side = bSide;
 		quote = quoted;
-		id = i;
-		System.out.println("\n---------------------\ninput id = " + i + "\nid =  " + id + "\n----------------------\n");
-		
+		id = i;		
 	}
 
 	public String getProduct() {

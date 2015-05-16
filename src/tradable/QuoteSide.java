@@ -5,19 +5,19 @@ import price.Price;
 
 public class QuoteSide implements Tradable {
 
-	String user;
-	String id;
-	Price sideP;
-	int volume;
-	long time = System.nanoTime();
-	String side;
-	String userName;
-	String product;
-	Price price;
-	int originalVolume;
-	int remainingVolume;
-	int cancelledVolume;
-	boolean quote;
+	private String user;
+	private String id;
+	private Price sideP;
+	private int volume;
+	private long time = System.nanoTime();
+	private String side;
+	private String userName;
+	private String product;
+	private Price price;
+	private int originalVolume;
+	private int remainingVolume;
+	private int cancelledVolume;
+	private boolean quote;
 
 	public QuoteSide(String userName, String productSymbol, Price sidePrice,
 			int originalVolume, String sideB) throws InvalidPriceOperation {

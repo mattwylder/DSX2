@@ -39,6 +39,9 @@ public class LastSalePublisher implements Publisher{
 		while(itr.hasNext()){
 			sendToSubscriber(itr.next(), product, price, volume);
 		}
+		
+		TickerPublisher tp = TickerPublisher.getInstance();
+		tp.publishTicker(product, price);
 	}
 	
 	private void sendToSubscriber(User user, String product, Price price, int volume){

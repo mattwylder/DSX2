@@ -1,5 +1,6 @@
 package tradable;
 
+import message.InvalidDataOperation;
 import price.InvalidPriceOperation;
 import price.Price;
 
@@ -8,29 +9,52 @@ public class Quote {
 	private static final String BUY_SIDE = "BUY";
 	private static final String SELL_SIDE = "SELL";
 	
-	String user;
-	String stockSymbol;
-	QuoteSide buy;
-	QuoteSide sell;
+	private String user;
+	private String stockSymbol;
+	private QuoteSide buy;
+	private QuoteSide sell;
+	private long time = System.nanoTime();
+	private Price price;
+	private int originalVolume;
+	private int remainingVolume;
+	private int cancelledVolume;
+	private String id;
 	
-	long time = System.nanoTime();
-	Price price;
-	int originalVolume;
-	int remainingVolume;
-	int cancelledVolume;
-	String id = user + stockSymbol + price + time;
-	
-	
+
 	public Quote(String userName, String productSymbol,
 			Price buyPrice, int buyVolume,
 			Price sellPrice, int sellVolume) throws Exception{
 		if(buyVolume < 1 || sellVolume < 1){
 			throw new InvalidPriceOperation("Cannot have 0 or negative buy volume");
 		}
-		user = userName;
-		stockSymbol = productSymbol;
+		setUser(userName);
+		setStockSymbol(productSymbol);
 		buy = new QuoteSide(userName, productSymbol, buyPrice, buyVolume, BUY_SIDE);
 		sell = new QuoteSide(userName, productSymbol, sellPrice, sellVolume, SELL_SIDE);
+	}
+	
+	public void setUser(String userIn) 
+			throws InvalidDataOperation {
+		if(userIn == null || userIn == null){
+			throw new InvalidDataOperation("Username is null or the empty string");
+		}
+		user = userIn;
+	}
+	
+	public void setStockSymbol(String stockSymbolIn)
+			throws InvalidDataOperation {
+		if(stockSymbolIn == null || stockSymbolIn.isEmpty()){
+			throw new InvalidDataOperation("Stock Symbol is null or the empty string");
+		}
+		stockSymbol = stockSymbolIn;
+	}
+	
+	public void setBuy(){
+		
+	}
+	
+	public void setSell(){
+		
 	}
 	
 	public String getUserName(){
