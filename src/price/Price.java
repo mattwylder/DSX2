@@ -1,6 +1,6 @@
 package price;
 
-public class Price {
+public class Price implements Comparable{
 	
 	private long value; //value in cents
 
@@ -107,4 +107,10 @@ public class Price {
 		else
 		{message = String.format("$%,d",dollars) + String.format(".%02d",cents);}
 		return message;	}
+	
+	@Override
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		return compareTo((Price)arg0);
+	}
 }

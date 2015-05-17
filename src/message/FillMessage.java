@@ -46,7 +46,7 @@ public class FillMessage implements Comparable<FillMessage> {
 		price = priceIn;
 	}
 	
-	private void setVolume(int volumeIn)
+	public void setVolume(int volumeIn)
 			throws InvalidDataOperation{
 		if(volumeIn < 1){
 			throw new InvalidDataOperation("Volume is less than 1");
