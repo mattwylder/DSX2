@@ -9,7 +9,7 @@ import tradable.*;
 
 public class ProductService {
 	
-	private ProductService instance;
+	private static ProductService instance;
 	private HashMap<String, ProductBook> books;
 	private String marketState;
 	
@@ -17,7 +17,7 @@ public class ProductService {
 		marketState = MarketState.CLOSED;
 	}
 	
-	public ProductService getInstance(){
+	public static ProductService getInstance(){
 		if(instance == null){
 			//TODO:synchronize
 			instance = new ProductService();
@@ -33,7 +33,7 @@ public class ProductService {
 		return null;
 	}
 	
-	public synchronized MarketState getMarketState(){
+	public synchronized String getMarketState(){
 		return marketState;
 	}
 	
