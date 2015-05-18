@@ -61,7 +61,7 @@ public class Quote {
 		return user;
 	}
 	
-	public String getProdcut(){
+	public String getProduct(){
 		return stockSymbol;
 	}
 	
