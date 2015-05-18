@@ -1,7 +1,10 @@
 package book;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import price.InvalidPriceOperation;
+import price.Price;
 import tradable.*;
 import message.*;
 
@@ -12,10 +15,6 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 	
 	public TradeProcessorPriceTimeImpl(ProductBookSide pbs){
 		productBookSide = pbs;
-	}
-	
-	public HashMap<String, FillMessage> doTrade(Tradable trd){
-		return null;
 	}
 	
 	private String makeFillKey(FillMessage fm){
@@ -30,8 +29,75 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 		return false;
 	}
 	
-	private void addFillMessage(FillMessage fm){
+	private void addFillMessage(FillMessage fm) 
+			throws InvalidDataOperation{
+		if(isNewFill(fm)){
+			fillMessages.put(makeFillKey(fm), fm);
+		}
+		else{
+			FillMessage msg = fillMessages.get(makeFillKey(fm));
+			msg.setVolume(msg.getVolume() + fm.getVolume());
+			msg.setDetails(fm.getDetails());
+		}
+	}
+	
+	public HashMap<String, FillMessage> doTrade(Tradable trd) 
+			throws InvalidDataOperation, InvalidPriceOperation{
+		fillMessages = new HashMap<String, FillMessage>();
+		ArrayList<Tradable> tradedOut = new ArrayList<Tradable>();
+		ArrayList<Tradable> entriesAtPrice = productBookSide.getEntriesAtTopOfBook();
+		Price tPrice = null;
+		FillMessage fm = null;
+		int remainder = 0;
+		for(Tradable t: entriesAtPrice){
+			if(trd.getRemainingVolume() == 0){
+				//Goto afterFor
+			}
+			else if(trd.getRemainingVolume() >= t.getRemainingVolume()){
+				tradedOut.add(t);
+				if(t.getPrice().isMarket()){
+					tPrice = trd.getPrice();
+				}
+				else{
+					tPrice = t.getPrice();
+				}
+				fm = new FillMessage(t.getUser(), t.getProduct(),
+						tPrice,t.getRemainingVolume(),"leaving 0",t.getSide(), t.getId());
+				addFillMessage(fm);
+				fm = new FillMessage(trd.getUser(), trd.getProduct(),
+						tPrice,trd.getRemainingVolume(),"leaving",trd.getSide(), trd.getId());
+				addFillMessage(fm);
+				trd.setRemainingVolume(trd.getRemainingVolume()-t.getRemainingVolume());
+				t.setRemainingVolume(0);
+				productBookSide.addOldEntry(t);
+			}
+			else{
+				remainder = t.getRemainingVolume() - trd.getRemainingVolume();
+				if(t.getPrice().isMarket()){
+					tPrice = trd.getPrice();
+				}
+				else{
+					tPrice = t.getPrice();
+				}
+				fm = new FillMessage(t.getUser(), t.getProduct(),
+						tPrice,t.getRemainingVolume(),"leaving",t.getSide(), t.getId());
+				addFillMessage(fm);
+				fm = new FillMessage(trd.getUser(), trd.getProduct(),
+						tPrice,trd.getRemainingVolume(),"leaving 0",trd.getSide(), trd.getId());
+				addFillMessage(fm);
+				trd.setRemainingVolume(0);
+				t.setRemainingVolume(remainder);
+				productBookSide.addOldEntry(trd);
+			}
+		}
 		
+		for(Tradable t : tradedOut){
+			entriesAtPrice.remove(t);
+		}
+		if(entriesAtPrice.isEmpty()){
+			productBookSide.clearIfEmpty(productBookSide.topOfBookPrice());
+		}
+		return fillMessages;
 	}
 	
 }

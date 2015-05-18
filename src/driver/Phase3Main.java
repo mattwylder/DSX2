@@ -2,18 +2,25 @@ package driver;
 
 import java.util.ArrayList;
 
+import publisher.*;
+import book.*;
+import client.*;
+import message.*;
+import price.*;
+import tradable.*;
+
 
 // HERE you should add any imports for your classes that you need to make this class compile.
 // You will need imports for User, Price, PriceFactory, CancelMessage, FillMessageOrder, 
 // ProductServiceQuote, CurrentMarketPublisher, LastSalePublisher, MessagePublisher,
 // TickerPublisher. Order, Quote & TradableDTO
 
-// Where you see <BUY>, replace that with YOUR representation of BUY (string, enum, etc).
-// Where you see <SELL>, replace that with YOUR representation of SELL (string, enum, etc).
+// Where you see "BUY", replace that with YOUR representation of BUY (string, enum, etc).
+// Where you see "SELL", replace that with YOUR representation of SELL (string, enum, etc).
 
-// Where you see <CLOSED>, replace that with YOUR representation of CLOSED (string, enum, etc).
-// Where you see <PREOPEN>, replace that with YOUR representation of PREOPEN (string, enum, etc).
-// Where you see <OPEN>, replace that with YOUR representation of OPEN (string, enum, etc).
+// Where you see "CLOSED", replace that with YOUR representation of CLOSED (string, enum, etc).
+// Where you see "PREOPEN", replace that with YOUR representation of PREOPEN (string, enum, etc).
+// Where you see "OPEN", replace that with YOUR representation of OPEN (string, enum, etc).
 
 public class Phase3Main {
 
@@ -56,12 +63,12 @@ public class Phase3Main {
     private static void doTestSet1(String stockSymbol) {
         try {
             System.out.println("TS1.1) Change Market State to PREOPEN then to OPEN. ANN & REX receive PREOPEN and OPEN Market messages");
-            ProductService.getInstance().setMarketState(<PREOPEN>);
-            ProductService.getInstance().setMarketState(<OPEN>);
+            ProductService.getInstance().setMarketState("PREOPEN");
+            ProductService.getInstance().setMarketState("OPEN");
             System.out.println();
 
             System.out.println("TS1.2) User " + u1.getUserName() + " cancels a non-existent order - should result in an exception");
-            ProductService.getInstance().submitOrderCancel(stockSymbol, <BUY>, "ABC123");
+            ProductService.getInstance().submitOrderCancel(stockSymbol, "BUY", "ABC123");
             System.out.println("Did not catch non-existent Stock error!");
         } catch (Exception ex) {
             System.out.println("Exception properly caught error: " + ex.getMessage());
@@ -90,7 +97,7 @@ public class Phase3Main {
 
         try {
             System.out.println("TS1.5) User " + u1.getUserName() + " enters order on non-existent stock");
-            ProductService.getInstance().submitOrder(new Order(u1.getUserName(), "X11", PriceFactory.makeLimitPrice("$641.10"), 111, <BUY>));
+            ProductService.getInstance().submitOrder(new Order(u1.getUserName(), "X11", PriceFactory.makeLimitPrice("$641.10"), 111, "BUY"));
             System.out.println("Did not catch non-existent Stock error!");
         } catch (Exception ex) {
             System.out.println("Caught Exception on order for bad class: " + ex.getMessage());
@@ -125,7 +132,7 @@ public class Phase3Main {
 
         System.out.println("TS2.4) Change Market State to Closed and verify the Market State");
         try {
-            ProductService.getInstance().setMarketState(<CLOSED>);
+            ProductService.getInstance().setMarketState("CLOSED");
             System.out.println("Product State: " + ProductService.getInstance().getMarketState());
         } catch (Exception ex) {
             System.out.println("Set market State caused an unexpected exception: " + ex.getMessage());
@@ -134,7 +141,7 @@ public class Phase3Main {
 
         System.out.println("TS2.5) Change Market State to PreOpen and verify the Market State");
         try {
-            ProductService.getInstance().setMarketState(<PREOPEN>);
+            ProductService.getInstance().setMarketState("PREOPEN");
             System.out.println("Product State: " + ProductService.getInstance().getMarketState());
         } catch (Exception ex) {
             System.out.println("Set market State caused an unexpected exception: " + ex.getMessage());
@@ -143,7 +150,7 @@ public class Phase3Main {
 
         System.out.println("TS2.6) Change Market State to Open and verify the Market State");
         try {
-            ProductService.getInstance().setMarketState(<OPEN>);
+            ProductService.getInstance().setMarketState("OPEN");
             System.out.println("Product State: " + ProductService.getInstance().getMarketState());
         } catch (Exception ex) {
             System.out.println("Set market State caused an unexpected exception: " + ex.getMessage());
@@ -207,8 +214,8 @@ public class Phase3Main {
 
         System.out.println("TS3.1) Change Market State to Closed then PreOpen the Market State. Rex & ANN should receive one market message for each state");
         try {
-            ProductService.getInstance().setMarketState(<CLOSED>);
-            ProductService.getInstance().setMarketState(<PREOPEN>);
+            ProductService.getInstance().setMarketState("CLOSED");
+            ProductService.getInstance().setMarketState("PREOPEN");
         } catch (Exception ex) {
             System.out.println("Set market State caused an unexpected exception: " + ex.getMessage());
         }
@@ -225,15 +232,15 @@ public class Phase3Main {
         System.out.println("TS3.3) User " + u1.getUserName() + " enters several BUY orders, REX and ANN receive 5 Current Market updates each: ");
         try {
             ProductService.getInstance().submitOrder(
-                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.10"), 111, <BUY>));
+                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.10"), 111, "BUY"));
             ProductService.getInstance().submitOrder(
-                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.11"), 222, <BUY>));
+                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.11"), 222, "BUY"));
             ProductService.getInstance().submitOrder(
-                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.12"), 333, <BUY>));
+                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.12"), 333, "BUY"));
             ProductService.getInstance().submitOrder(
-                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.13"), 444, <BUY>));
+                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.13"), 444, "BUY"));
             ProductService.getInstance().submitOrder(
-                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.14"), 555, <BUY>));
+                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.14"), 555, "BUY"));
         } catch (Exception ex) {
             System.out.println("Submitting Orders caused an unexpected exception: " + ex.getMessage());
         }
@@ -250,15 +257,15 @@ public class Phase3Main {
         System.out.println("TS3.5) User " + u2.getUserName() + " enters several Sell orders - no Current Market received - none of the orders improves the market: ");
         try {
             ProductService.getInstance().submitOrder(
-                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.16"), 111, <SELL>));
+                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.16"), 111, "SELL"));
             ProductService.getInstance().submitOrder(
-                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.17"), 222, <SELL>));
+                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.17"), 222, "SELL"));
             ProductService.getInstance().submitOrder(
-                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.18"), 333, <SELL>));
+                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.18"), 333, "SELL"));
             ProductService.getInstance().submitOrder(
-                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.19"), 444, <SELL>));
+                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.19"), 444, "SELL"));
             ProductService.getInstance().submitOrder(
-                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.20"), 555, <SELL>));
+                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.20"), 555, "SELL"));
         } catch (Exception ex) {
             System.out.println("Submitting Orders caused an unexpected exception: " + ex.getMessage());
         }
@@ -275,7 +282,7 @@ public class Phase3Main {
         System.out.println("TS3.7) User " + u1.getUserName() + " enters a BUY order that won't trade as market is in PREOPEN. Rex & Ann receive Current Market updates: ");
         try {
             ProductService.getInstance().submitOrder(
-                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.15"), 105, <BUY>));
+                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("$641.15"), 105, "BUY"));
         } catch (Exception ex) {
             System.out.println("Submitting an Order caused an unexpected exception: " + ex.getMessage());
         }
@@ -285,7 +292,7 @@ public class Phase3Main {
         System.out.println("     ANN & REX should receive OPEN Market Message");
         System.out.println("     ANN & REX each receive a Fill Msg, Current Market Msg, Last Sale Msg, & Ticker Msg:");
         try {
-            ProductService.getInstance().setMarketState(<OPEN>);
+            ProductService.getInstance().setMarketState("OPEN");
         } catch (Exception ex) {
             System.out.println("Set market State caused an unexpected exception: " + ex.getMessage());
         }
@@ -304,7 +311,7 @@ public class Phase3Main {
         System.out.println("        REX receives 1 Fill Message, a Current Market, a Last Sale & a Ticker, and a cancel for the 40 remaining MKT order quantity not traded");
         try {
             ProductService.getInstance().submitOrder(
-                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeMarketPrice(), 1750, <BUY>));
+                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeMarketPrice(), 1750, "BUY"));
         } catch (Exception ex) {
             System.out.println("Submitting an Order caused an unexpected exception: " + ex.getMessage());
         }
@@ -334,7 +341,7 @@ public class Phase3Main {
         System.out.println("        REX receives 5 Cancel Messages, and a Current Market Update.");
         System.out.println("        ANN receives 1 Cancel Message, and a Current Market Update.");
         try {
-            ProductService.getInstance().setMarketState(<CLOSED>);
+            ProductService.getInstance().setMarketState("CLOSED");
         } catch (Exception ex) {
             System.out.println("Set market State caused an unexpected exception: " + ex.getMessage());
         }
@@ -353,8 +360,8 @@ public class Phase3Main {
     private static void doTestSet4(String stockSymbol) {
         System.out.println("TS4.1) Change Market State to PREOPEN then to OPEN. ANN & REX receive Market PREOPEN and OPEN messages:");
         try {
-            ProductService.getInstance().setMarketState(<PREOPEN>);
-            ProductService.getInstance().setMarketState(<OPEN>);
+            ProductService.getInstance().setMarketState("PREOPEN");
+            ProductService.getInstance().setMarketState("OPEN");
         } catch (Exception ex) {
             System.out.println("Unexpected Exception occurred when setting market state " + stockSymbol + ": " + ex.getMessage());
         }
@@ -363,7 +370,7 @@ public class Phase3Main {
         System.out.println("TS4.2) User " + u1.getUserName() + " enters a BUY order, ANN & REX receive Current Market message:");
         try {
             ProductService.getInstance().submitOrder(
-                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice(64130), 369, <BUY>));
+                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice(64130), 369, "BUY"));
         } catch (Exception ex) {
             System.out.println("Unexpected Exception occurred when entering order " + stockSymbol + ": " + ex.getMessage());
         }
@@ -373,7 +380,7 @@ public class Phase3Main {
         System.out.println("    ANN & REX receive 1 Fill Message each, as well as a Current Market, a Last Sale & a Ticker message:");
         try {
             ProductService.getInstance().submitOrder(
-                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice(64130), 369, <SELL>));
+                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice(64130), 369, "SELL"));
         } catch (Exception ex) {
             System.out.println("Unexpected Exception occurred when entering order " + stockSymbol + ": " + ex.getMessage());
         }
@@ -382,7 +389,7 @@ public class Phase3Main {
         System.out.println("TS4.4) User " + u1.getUserName() + " enters a MKT BUY order. REX receives cancel message because there is no market to trade with:");
         try {
             ProductService.getInstance().submitOrder(
-                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeMarketPrice(), 456, <BUY>));
+                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeMarketPrice(), 456, "BUY"));
         } catch (Exception ex) {
             System.out.println("Unexpected Exception occurred when entering order " + stockSymbol + ": " + ex.getMessage());
         }
@@ -391,7 +398,7 @@ public class Phase3Main {
         System.out.println("TS4.5) User " + u1.getUserName() + " enters a BUY order, ANN & REX receive Current Market message:");
         try {
             ProductService.getInstance().submitOrder(
-                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("641.1"), 151, <BUY>));
+                    new Order(u1.getUserName(), stockSymbol, PriceFactory.makeLimitPrice("641.1"), 151, "BUY"));
         } catch (Exception ex) {
             System.out.println("Unexpected Exception occurred when entering order " + stockSymbol + ": " + ex.getMessage());
         }
@@ -401,7 +408,7 @@ public class Phase3Main {
         System.out.println("    ANN & REX receive 1 Fill Message each, as well as a Current Market, a Last Sale & a Ticker message:");
         try {
             ProductService.getInstance().submitOrder(
-                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice(64110), 51, <SELL>));
+                    new Order(u2.getUserName(), stockSymbol, PriceFactory.makeLimitPrice(64110), 51, "SELL"));
         } catch (Exception ex) {
             System.out.println("Unexpected Exception occurred when entering order " + stockSymbol + ": " + ex.getMessage());
         }
@@ -409,7 +416,7 @@ public class Phase3Main {
 
         System.out.println("TS4.7) Change Market State to CLOSED State...Both users should get a Market message, many Cancel Messages, and a Current Market Update.");
         try {
-            ProductService.getInstance().setMarketState(<CLOSED>);
+            ProductService.getInstance().setMarketState("CLOSED");
         } catch (Exception ex) {
             System.out.println("Unexpected Exception occurred when setting market state " + stockSymbol + ": " + ex.getMessage());
         }

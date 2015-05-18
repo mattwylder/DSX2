@@ -3,7 +3,9 @@ package book;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import message.InvalidDataOperation;
 import GlobalConstants.MarketState;
+import price.InvalidPriceOperation;
 import publisher.MarketDataDTO;
 import tradable.*;
 
@@ -25,7 +27,7 @@ public class ProductService {
 		return instance;
 	}
 	
-	public synchronized ArrayList<TradableDTO> getOrdersWithRemaining(String userName, String product){
+	public synchronized ArrayList<TradableDTO> getOrdersWithRemainingQty(String userName, String product){
 		return allBooks.get(product).getOrdersWithRemainingQty(userName);
 	}
 	
@@ -50,7 +52,7 @@ public class ProductService {
 	}
 	
 	public synchronized void setMarketState(String ms)
-			throws InvalidMarketStateTransition{
+			throws InvalidMarketStateTransition, InvalidDataOperation, InvalidPriceOperation{
 		if(marketState.equals("CLOSED") && ms.equals("OPEN")){
 			throw new InvalidMarketStateTransition("Market cannot transition directly from CLOSED to OPEN");
 		}
@@ -99,7 +101,7 @@ public class ProductService {
 	}
 	
 	public synchronized String submitOrder(Order o)
-			throws InvalidMarketStateException, NoSuchProductException{
+			throws InvalidMarketStateException, NoSuchProductException, InvalidDataOperation, InvalidPriceOperation{
 		if(marketState.equals("CLOSED")){
 			throw new InvalidMarketStateException("Market is CLOSED, cannot submit order");
 		}
@@ -113,7 +115,7 @@ public class ProductService {
 		return o.getId();
 	}
 	
-	public synchronized void submitOrderCancel(String product, BookSide side, String orderId)
+	public synchronized void submitOrderCancel(String product, String side, String orderId)
 			throws InvalidMarketStateException, NoSuchProductException{
 		if(marketState.equals("CLOSED")){
 			throw new InvalidMarketStateException("Market is CLOSED, cannot submit order");

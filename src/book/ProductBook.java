@@ -102,7 +102,8 @@ public class ProductBook {
 		
 	}
 	
-	public synchronized void openMarket(){
+	public synchronized void openMarket() 
+			throws InvalidDataOperation, InvalidPriceOperation{
 		Price buyPrice = buySide.topOfBookPrice();
 		Price sellPrice = sellSide.topOfBookPrice();
 		ArrayList<Tradable> topOfBuySide = null;
@@ -140,7 +141,7 @@ public class ProductBook {
 		updateCurrentMarket();
 	}
 	
-	public synchronized void cancelOrder(BookSide side, String orderId){
+	public synchronized void cancelOrder(String side, String orderId){
 		if(side.equals("BUY")){
 			buySide.submitOrderCancel(orderId);
 		}
@@ -157,7 +158,7 @@ public class ProductBook {
 	}
 	
 	public synchronized void addToBook(Quote q) 
-				throws DataValidationException{
+				throws DataValidationException, InvalidDataOperation, InvalidPriceOperation{
 		QuoteSide buyQuote = q.getQuoteSide("BUY");
 		QuoteSide sellQuote = q.getQuoteSide("SELL");
 		Price buyPrice = q.getQuoteSide("BUY").getPrice();
@@ -185,7 +186,8 @@ public class ProductBook {
 		updateCurrentMarket();
 	}
 	
-	public synchronized void addToBook(Order o){
+	public synchronized void addToBook(Order o) 
+			throws InvalidDataOperation, InvalidPriceOperation{
 		addToBook(o.getSide(), o);
 		addToBook(o.getSide(), o);
 		updateCurrentMarket();
@@ -214,7 +216,8 @@ public class ProductBook {
 		return msgs.get(0).getVolume();
 	}
 	
-	private synchronized void addToBook(String side, Tradable trd){
+	private synchronized void addToBook(String side, Tradable trd) 
+			throws InvalidDataOperation, InvalidPriceOperation{
 		if(ProductService.getInstance().getMarketState().equals(MarketState.PREOPEN)){
 			if(side.equals("BUY")){
 				buySide.addToBook(trd);

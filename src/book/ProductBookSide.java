@@ -9,6 +9,7 @@ import java.util.Iterator;
 import message.CancelMessage;
 import message.FillMessage;
 import message.InvalidDataOperation;
+import price.InvalidPriceOperation;
 import price.Price;
 import price.PriceFactory;
 import publisher.MessagePublisher;
@@ -204,7 +205,8 @@ public class ProductBookSide {
 		}
 	}
 	
-	public HashMap<String, FillMessage> tryTrade(Tradable trd){
+	public HashMap<String, FillMessage> tryTrade(Tradable trd) 
+			throws InvalidDataOperation, InvalidPriceOperation{
 		HashMap<String, FillMessage> allFills;
 		if(trd.getSide().equals("BUY")){
 			allFills = trySellAgainstBuySideTrade(trd);
@@ -220,7 +222,8 @@ public class ProductBookSide {
 		return allFills;
 	}
 	
-	public synchronized HashMap<String,FillMessage> tryBuyAgainstSellSideTrade(Tradable trd){
+	public synchronized HashMap<String,FillMessage> tryBuyAgainstSellSideTrade(Tradable trd) 
+			throws InvalidDataOperation, InvalidPriceOperation{
 		HashMap<String, FillMessage> allFills = new HashMap<String, FillMessage>();
 		HashMap<String, FillMessage> fillMsgs = new HashMap<String, FillMessage>();
 		HashMap<String, FillMessage> someMsgs;
@@ -235,7 +238,8 @@ public class ProductBookSide {
 		return allFills;
 	}
 	
-	public synchronized HashMap<String,FillMessage> trySellAgainstBuySideTrade(Tradable trd){
+	public synchronized HashMap<String,FillMessage> trySellAgainstBuySideTrade(Tradable trd) 
+			throws InvalidDataOperation, InvalidPriceOperation{
 		HashMap<String, FillMessage> allFills = new HashMap<String, FillMessage>();
 		HashMap<String, FillMessage> fillMsgs = new HashMap<String, FillMessage>();
 		HashMap<String, FillMessage> someMsgs;
