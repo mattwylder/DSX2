@@ -16,13 +16,17 @@ public class ProductService {
 	private String marketState;
 	
 	private ProductService(){
-		marketState = MarketState.CLOSED;
+		marketState = "CLOSED";
+		allBooks = new HashMap<String,ProductBook>();
 	}
 	
 	public static ProductService getInstance(){
 		if(instance == null){
-			//TODO:synchronize
-			instance = new ProductService();
+			synchronized(ProductService.class){
+				if(instance == null){
+					instance = new ProductService();
+				}
+			}
 		}
 		return instance;
 	}
