@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import message.InvalidDataOperation;
+import message.MarketMessage;
 import GlobalConstants.MarketState;
 import price.InvalidPriceOperation;
+import publisher.CurrentMarketPublisher;
 import publisher.MarketDataDTO;
+import publisher.MessagePublisher;
 import tradable.*;
 
 public class ProductService {
@@ -67,6 +70,7 @@ public class ProductService {
 			throw new InvalidMarketStateTransition("Market cannot transition from OPEN to PREOPEN");
 		}
 		marketState = ms;
+		MessagePublisher.getInstance().publishMarketMessage(new MarketMessage(ms));
 		for(ProductBook book : allBooks.values()){
 			if(marketState.equals("OPEN")){
 				book.openMarket();
