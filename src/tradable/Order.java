@@ -25,9 +25,6 @@ public class Order implements Tradable {
 		setOriginalVolume(oVolume);
 		setSide(bSide);
 		setId();
-//		if(oVolume < 1){
-//			throw new Exception("Cannot have 0 or negative volume");
-//		}
 	}
 	
 	private void setUser(String userIn)
@@ -60,6 +57,7 @@ public class Order implements Tradable {
 			throw new InvalidDataOperation("Volume is less than 1");
 		}
 		originalVolume = originalVolumeIn;
+		remainingVolume = originalVolume;
 	}
 
 	public void setSide(String side) {

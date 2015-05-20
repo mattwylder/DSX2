@@ -8,7 +8,7 @@ import price.Price;
 import price.PriceFactory;
 
 
-public class CurrentMarketPublisher implements Publisher{
+public class CurrentMarketPublisher extends PublisherImpl{
 	
 	private volatile static CurrentMarketPublisher instance;
 	private Publisher publisher;
@@ -30,10 +30,10 @@ public class CurrentMarketPublisher implements Publisher{
 	}
 	
 	public synchronized void publishCurrentMarket(MarketDataDTO md){
-		if(!publisher.getSubscriptions().containsKey(md.getProduct())){
+		if(!subscriptions.containsKey(md.getProduct())){
 			return;
 		}
-		ArrayList<User> subscribers = publisher.getSubscriptions().get(md.product);
+		ArrayList<User> subscribers = subscriptions.get(md.product);
 		Iterator<User> itr = subscribers.iterator();
 		while(itr.hasNext()){
 			sendToSubscriber(itr.next(), md.product, md.buyPrice, md.buyVolume, md.sellPrice, md.sellVolume);
@@ -50,23 +50,6 @@ public class CurrentMarketPublisher implements Publisher{
 			tmpSell = PriceFactory.makeLimitPrice(0);
 		}
 		user.acceptCurrentMarket(product, tmpBuy, buyVolume, tmpSell, sellVolume);
-	}
-
-	@Override
-	public void subscribe(User user, String product)
-			throws AlreadySubscribedException {
-		publisher.subscribe(user, product);
-	}
-
-	@Override
-	public void unSubscribe(User user, String product)
-			throws NotSubscribedException {
-		publisher.unSubscribe(user, product);
-	}
-
-	@Override
-	public Map<String, ArrayList<User>> getSubscriptions() {
-		return null;
 	}
 
 }

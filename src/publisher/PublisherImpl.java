@@ -9,7 +9,7 @@ import client.User;
 
 public class PublisherImpl implements Publisher {
 
-	private Map<String, ArrayList<User>> subscriptions;
+	protected Map<String, ArrayList<User>> subscriptions;
 
 	protected PublisherImpl() {
 		subscriptions = new HashMap<String, ArrayList<User>>();

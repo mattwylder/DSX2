@@ -1,5 +1,6 @@
 package tradable;
 
+import message.InvalidDataOperation;
 import price.InvalidPriceOperation;
 import price.Price;
 
@@ -7,35 +8,75 @@ public class QuoteSide implements Tradable {
 
 	private String user;
 	private String id;
-	private Price sideP;
 	private int volume;
 	private long time = System.nanoTime();
 	private String side;
-	private String userName;
 	private String product;
 	private Price price;
 	private int originalVolume;
 	private int remainingVolume;
 	private int cancelledVolume;
-	private boolean quote;
 
 	public QuoteSide(String userName, String productSymbol, Price sidePrice,
-			int originalVolume, String sideB) throws InvalidPriceOperation {
+			int originalVolume, String sideB) 
+					throws InvalidPriceOperation, InvalidDataOperation {
 		if(originalVolume < 1){
 			throw new InvalidPriceOperation("Cannot have 0 or negative buy volume");
 		}
-		user = userName;
-		product = productSymbol;
-		sideP = sidePrice;
-		volume = originalVolume;
-		side = sideB;
-		price = sidePrice;
-		this.originalVolume = originalVolume;
-		this.remainingVolume = originalVolume;
-		id = userName + product + time;
+		setUser(userName);
+		setProduct(productSymbol);
+		setOriginalVolume(originalVolume);
+		setSide(sideB);
+		setPrice(sidePrice);
+		setId();
 
 	}
-
+	
+	public void setUser(String userIn) 
+			throws InvalidDataOperation {
+		if(userIn == null || userIn == null){
+			throw new InvalidDataOperation("Username is null or the empty string");
+		}
+		user = userIn;
+	}
+	
+	public void setProduct(String stockSymbolIn)
+			throws InvalidDataOperation {
+		if(stockSymbolIn == null || stockSymbolIn.isEmpty()){
+			throw new InvalidDataOperation("Stock Symbol is null or the empty string");
+		}
+		product = stockSymbolIn;
+	}
+	
+	private void setPrice(Price priceIn)
+			throws InvalidDataOperation{
+		if(priceIn == null){
+			throw new InvalidDataOperation("Price is null");
+		}
+		price = priceIn;
+	}
+	
+	private void setOriginalVolume(int originalVolumeIn)
+			throws InvalidDataOperation{
+		if(originalVolumeIn < 1){
+			throw new InvalidDataOperation("Volume is less than 1");
+		}
+		originalVolume = originalVolumeIn;
+		remainingVolume = originalVolume;
+	}
+	
+	private void setSide(String sideIn)
+			throws InvalidDataOperation{
+		if(!sideIn.equals("BUY") && !sideIn.equals("SELL")){
+			throw new InvalidDataOperation("Invalid side: Side must be BUY or SELL, was entered as " + sideIn);
+		}
+		side = sideIn;
+	}
+	
+	private void setId(){
+		id = user + product + time;
+	}
+	
 	public QuoteSide(QuoteSide qs) {
 		user = qs.getUserName();
 		product = qs.getProduct();
@@ -46,12 +87,6 @@ public class QuoteSide implements Tradable {
 	public String getUserName() {
 		return user;
 	}
-
-
-//	public QuoteSide getQuoteSide(String sideln) {
-//
-//		return null;
-//	}
 
 	public int getVolume() {
 		return volume;

@@ -8,7 +8,7 @@ import java.util.Map;
 import client.User;
 import price.Price;
 
-public class TickerPublisher implements Publisher {
+public class TickerPublisher extends PublisherImpl {
 
 	private static final char INCREASE = (char) 8593;
 	private static final char DECREASE = (char) 8595;
@@ -36,47 +36,30 @@ public class TickerPublisher implements Publisher {
 	}
 
 	public synchronized void publishTicker(String product, Price price) {
-		if (!publisher.getSubscriptions().containsKey(product)) {
+		Price lastSale = lastSales.get(product);
+		if (!subscriptions.containsKey(product)) {
 			return;
 		}
-		Iterator<User> itr = publisher.getSubscriptions().get(product)
-				.iterator();
-		char direction = NO_PREVIOUS_VALUE;
-		System.out.println("Previous value: " + lastSales.containsValue(product));
-		if (lastSales.containsValue(product)) {
-			Price lastSale;
-			lastSale = lastSales.get(product);
-			if (lastSale.greaterThan(price)) {
-				direction = DECREASE;
-			} else if (lastSale.lessThan(price)) {
-				direction = INCREASE;
-			} else {
-				direction = NO_CHANGE;
-			}
+		Iterator<User> itr = subscriptions.get(product).iterator();
+		char direction = NO_PREVIOUS_VALUE;	
+		
+		if (lastSale == null){
+			lastSales.put(product, price);
 		}
-
+		else if (lastSale.greaterThan(price)) {
+			direction = DECREASE;
+			lastSales.replace(product, price);
+		} else if (lastSale.lessThan(price)) {
+			direction = INCREASE;
+			lastSales.replace(product, price);
+		} else {
+			direction = NO_CHANGE;
+		}
+	
 		while (itr.hasNext()) {
 			itr.next().acceptTicker(product, price, direction);
 		}
-		lastSales.put(product, price);
-	}
-
-	public void subscribe(User user, String product)
-			throws AlreadySubscribedException {
-		publisher.subscribe(user, product);
-
-	}
-
-	public void unSubscribe(User user, String product)
-			throws NotSubscribedException {
-		publisher.unSubscribe(user, product);
-
-	}
-
-	@Override
-	public Map<String, ArrayList<User>> getSubscriptions() {
-		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 }

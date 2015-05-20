@@ -23,10 +23,12 @@ public class ProductBookSide {
 	private TradeProcessor processor;
 	private ProductBook parent;
 	
-	public ProductBookSide(ProductBook pb){
+	public ProductBookSide(ProductBook pb, String sideIn){
 		parent = pb;
 		processor = new TradeProcessorPriceTimeImpl(this);
 		bookEntries = new HashMap<Price, ArrayList<Tradable>>();
+		side = sideIn;
+		
 	}
 	
 	public synchronized ArrayList<TradableDTO> getOrdersWithRemainingQty(String userName){
@@ -54,9 +56,6 @@ public class ProductBookSide {
 			return null;
 		}
 		ArrayList<Price> sorted = getSortedPrices();
-		if (side == BookSide.BUY) {
-			Collections.reverse(sorted); // Reverse them
-		}
 		
 		return bookEntries.get(sorted.get(0));
 	}
@@ -131,12 +130,19 @@ public class ProductBookSide {
 	
 	public synchronized void cancelAll(){
 		ArrayList<ArrayList<Tradable>> orders = new ArrayList<ArrayList<Tradable>>(bookEntries.values());
+		;
 		ArrayList<Tradable> tradables;
-		for( int i = 0; i < orders.size(); i++){
-			tradables = orders.get(i);
-			for( int j = 0; j < tradables.size(); j++ ){
-				submitOrderCancel(tradables.get(j).getId());
-				submitQuoteCancel(tradables.get(j).getUser());
+//		for( int i = 0; i < orders.size(); i++){
+//			tradables = orders.get(i);
+//			for( int j = 0; j < tradables.size(); j++ ){
+//				submitOrderCancel(tradables.get(j).getId());
+//				submitQuoteCancel(tradables.get(j).getUser());
+//			}
+//		}
+		for(ArrayList<Tradable> lst : orders){
+			for(Tradable trd : lst){
+				submitOrderCancel(trd.getId());
+				submitQuoteCancel(trd.getUser());
 			}
 		}
 	}
@@ -319,6 +325,9 @@ public class ProductBookSide {
 	private ArrayList<Price> getSortedPrices(){
 		ArrayList<Price> sorted = new ArrayList<Price>(bookEntries.keySet()); // Get prices
 		Collections.sort(sorted); // Sort them
+		if(side.equals("BUY")){
+			Collections.reverse(sorted);
+		}
 		return sorted;
 	}
 }

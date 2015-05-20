@@ -9,7 +9,7 @@ import message.FillMessage;
 import message.MarketMessage;
 import client.User;
 
-public class MessagePublisher implements Publisher{
+public class MessagePublisher extends PublisherImpl{
 
 	private static volatile MessagePublisher instance;
 	private static Publisher publisher;
@@ -33,10 +33,10 @@ public class MessagePublisher implements Publisher{
 	public synchronized void publishCancel(CancelMessage cm){
 		//TODO: All Publishers need to check if things are actually in subscriptions
 		
-		if(!publisher.getSubscriptions().containsKey(cm.getProduct())){
+		if(!subscriptions.containsKey(cm.getProduct())){
 			return;
 		}
-		ArrayList<User> subscribers = publisher.getSubscriptions().get(cm.getProduct());
+		ArrayList<User> subscribers = subscriptions.get(cm.getProduct());
 		for(int i = 0; i < subscribers.size(); i ++){
 			if(subscribers.get(i).getUserName().equals(cm.getUser())){
 				subscribers.get(i).acceptMessage(cm);
@@ -45,10 +45,10 @@ public class MessagePublisher implements Publisher{
 	}
 	
 	public synchronized void publishFill(FillMessage message){
-		if(!publisher.getSubscriptions().containsKey(message.getProduct())){
+		if(!subscriptions.containsKey(message.getProduct())){
 			return;
 		}
-		ArrayList<User> subscribers = publisher.getSubscriptions().get(message.getProduct());
+		ArrayList<User> subscribers = subscriptions.get(message.getProduct());
 		for(int i = 0; i < subscribers.size(); i ++){
 			if(subscribers.get(i).getUserName().equals(message.getUser())){
 				subscribers.get(i).acceptMessage(message);	
@@ -57,7 +57,7 @@ public class MessagePublisher implements Publisher{
 	}
 	
 	public synchronized void publishMarketMessage(MarketMessage message){
-		Iterator<ArrayList<User>> i = publisher.getSubscriptions().values().iterator();
+		Iterator<ArrayList<User>> i = subscriptions.values().iterator();
 		Iterator<User> j;
 		while(i.hasNext()){
 			j = i.next().iterator();
@@ -66,25 +66,5 @@ public class MessagePublisher implements Publisher{
 			}
 		}
 	}
-
-	@Override
-	public void subscribe(User user, String product)
-			throws AlreadySubscribedException {
-		publisher.subscribe(user, product);
-	}
-
-	@Override
-	public void unSubscribe(User user, String product)
-			throws NotSubscribedException {
-		publisher.unSubscribe(user, product);
-		
-	}
-
-	@Override
-	public Map<String, ArrayList<User>> getSubscriptions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	
 }

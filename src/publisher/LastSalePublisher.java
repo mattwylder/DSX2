@@ -7,7 +7,7 @@ import client.User;
 import price.Price;
 import price.PriceFactory;
 
-public class LastSalePublisher implements Publisher{
+public class LastSalePublisher extends PublisherImpl{
 	
 	private volatile static LastSalePublisher instance;
 	private static Publisher publisher;
@@ -31,10 +31,10 @@ public class LastSalePublisher implements Publisher{
 	}
 	
 	public synchronized void publishLastSale(String product, Price price, int volume){
-		if(!publisher.getSubscriptions().containsKey(product)){
+		if(!subscriptions.containsKey(product)){
 			return;
 		}
-		ArrayList<User> subscribers = publisher.getSubscriptions().get(product);
+		ArrayList<User> subscribers = subscriptions.get(product);
 		Iterator<User> itr = subscribers.iterator();
 		while(itr.hasNext()){
 			sendToSubscriber(itr.next(), product, price, volume);
@@ -52,24 +52,4 @@ public class LastSalePublisher implements Publisher{
 		user.acceptLastSale(product, price, volume);
 	}
 
-	@Override
-	public void subscribe(User user, String product)
-			throws AlreadySubscribedException {
-		// TODO Auto-generated method stub
-		publisher.subscribe(user, product);
-	}
-
-	@Override
-	public void unSubscribe(User user, String product)
-			throws NotSubscribedException {
-		// TODO Auto-generated method stub
-		publisher.unSubscribe(user, product);
-	}
-
-	@Override
-	public Map<String, ArrayList<User>> getSubscriptions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

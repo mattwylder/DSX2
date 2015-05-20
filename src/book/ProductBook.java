@@ -27,8 +27,8 @@ public class ProductBook {
 	
 	public ProductBook(String stockSymbol){
 		product = stockSymbol;
-		buySide = new ProductBookSide(this);
-		sellSide = new ProductBookSide(this);
+		buySide = new ProductBookSide(this, "BUY");
+		sellSide = new ProductBookSide(this, "SELL");
 	}
 	
 	public synchronized ArrayList<TradableDTO> getOrdersWithRemainingQty(String userName){
@@ -190,7 +190,6 @@ public class ProductBook {
 	
 	public synchronized void addToBook(Order o) 
 			throws InvalidDataOperation, InvalidPriceOperation{
-		addToBook(o.getSide(), o);
 		addToBook(o.getSide(), o);
 		updateCurrentMarket();
 	}
