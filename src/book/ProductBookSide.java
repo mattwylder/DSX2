@@ -25,6 +25,7 @@ public class ProductBookSide {
 	
 	public ProductBookSide(ProductBook pb){
 		parent = pb;
+		processor = new TradeProcessorPriceTimeImpl(this);
 		bookEntries = new HashMap<Price, ArrayList<Tradable>>();
 	}
 	
@@ -56,7 +57,8 @@ public class ProductBookSide {
 		if (side == BookSide.BUY) {
 			Collections.reverse(sorted); // Reverse them
 		}
-		return bookEntries.get(sorted.indexOf(0));
+		
+		return bookEntries.get(sorted.get(0));
 	}
 	
 	public synchronized String[] getBookDepth(){
@@ -146,6 +148,20 @@ public class ProductBookSide {
 //				from the book, and create a TradableDTO using data from that QuoteSide, and return the DTO from the
 //				method. If no quote is found, return null. Note, if the Quote was the last Tradable in the ArrayList of Tradables
 //				at that price, remove the price entry from the “bookEntries” HashMap (i.e., bookEntries.remove(price) )
+		for(ArrayList<Tradable> lst : orders){
+			for(Tradable trd : lst){
+				if(trd.getUser().equals(user)){
+					lst.remove(trd);
+					TradableDTO result = new TradableDTO(trd.getProduct(), trd.getPrice(), trd.getOriginalVolume(),
+							trd.getRemainingVolume(), trd.getCancelledVolume(), trd.getUser(), trd.getSide(), 
+							trd.isQuote(), trd.getId());
+					if(lst.isEmpty()){
+						bookEntries.remove(trd.getPrice());
+					}
+					return result;
+				}
+			}
+		}
 
 		return null;
 	}
@@ -227,12 +243,14 @@ public class ProductBookSide {
 		HashMap<String, FillMessage> allFills = new HashMap<String, FillMessage>();
 		HashMap<String, FillMessage> fillMsgs = new HashMap<String, FillMessage>();
 		HashMap<String, FillMessage> someMsgs;
-		boolean canTrade = (trd.getRemainingVolume() > 0 && !bookEntries.isEmpty()) &&
-				(trd.getPrice().greaterOrEqual(topOfBookPrice()) ||trd.getPrice().isMarket() );
+		boolean canTrade = trd.getRemainingVolume() > 0 && !isEmpty() &&
+				(trd.getPrice().lessOrEqual(topOfBookPrice()) ||trd.getPrice().isMarket() );
 		
 		while(canTrade){
 			someMsgs = processor.doTrade(trd);
 			fillMsgs = mergeFills(fillMsgs, someMsgs);
+			canTrade = (trd.getRemainingVolume() > 0 && !isEmpty()) &&
+					(trd.getPrice().lessOrEqual(topOfBookPrice()) ||trd.getPrice().isMarket() );
 		}
 		allFills.putAll(fillMsgs);
 		return allFills;
@@ -243,13 +261,15 @@ public class ProductBookSide {
 		HashMap<String, FillMessage> allFills = new HashMap<String, FillMessage>();
 		HashMap<String, FillMessage> fillMsgs = new HashMap<String, FillMessage>();
 		HashMap<String, FillMessage> someMsgs;
-		//boolean canTrade = (trd.getRemainingVolume() > 0 && !bookEntries.isEmpty() && trd.getPrice().lessOrEqual(topOfBookPrice()))
-		//		|| (trd.getRemainingVolume() > 0 && !bookEntries.isEmpty() && trd.getPrice().isMarket());
-		boolean canTrade= (trd.getRemainingVolume() > 0 && !bookEntries.isEmpty()) && 
-				(trd.getPrice().lessOrEqual(topOfBookPrice()) || trd.getPrice().isMarket());
+
+		boolean canTrade = (trd.getRemainingVolume() > 0 && !isEmpty() && trd.getPrice().greaterOrEqual(topOfBookPrice()))
+				|| (trd.getRemainingVolume() > 0 && !bookEntries.isEmpty() && trd.getPrice().isMarket());
 		while(canTrade){
 			someMsgs = processor.doTrade(trd);
 			fillMsgs = mergeFills(fillMsgs, someMsgs);
+			canTrade= (trd.getRemainingVolume() > 0 && !bookEntries.isEmpty()) && 
+					(trd.getPrice().greaterOrEqual(topOfBookPrice()) || trd.getPrice().isMarket());
+			
 		}
 		allFills.putAll(fillMsgs);
 		return allFills;

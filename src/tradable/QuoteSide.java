@@ -30,7 +30,8 @@ public class QuoteSide implements Tradable {
 		volume = originalVolume;
 		side = sideB;
 		price = sidePrice;
-
+		this.originalVolume = originalVolume;
+		this.remainingVolume = originalVolume;
 		id = userName + product + time;
 
 	}
@@ -47,10 +48,10 @@ public class QuoteSide implements Tradable {
 	}
 
 
-	public QuoteSide getQuoteSide(String sideln) {
-
-		return null;
-	}
+//	public QuoteSide getQuoteSide(String sideln) {
+//
+//		return null;
+//	}
 
 	public int getVolume() {
 		return volume;
@@ -91,7 +92,7 @@ public class QuoteSide implements Tradable {
 	}
 
 	public String getUser() {
-		return userName;
+		return user;
 	}
 
 	public String getSide() {

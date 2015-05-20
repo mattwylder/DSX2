@@ -23,7 +23,7 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 	
 	private boolean isNewFill(FillMessage fm){
 		String key = makeFillKey(fm);
-		if(fillMessages.containsKey(key)){
+		if(!fillMessages.containsKey(key)){
 			return true;
 		}
 		return false;
@@ -35,7 +35,8 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 			fillMessages.put(makeFillKey(fm), fm);
 		}
 		else{
-			FillMessage msg = fillMessages.get(makeFillKey(fm));
+			String key = makeFillKey(fm);
+			FillMessage msg = fillMessages.get(key);
 			msg.setVolume(msg.getVolume() + fm.getVolume());
 			msg.setDetails(fm.getDetails());
 		}
@@ -52,6 +53,7 @@ public class TradeProcessorPriceTimeImpl implements TradeProcessor{
 		for(Tradable t: entriesAtPrice){
 			if(trd.getRemainingVolume() == 0){
 				//Goto afterFor
+				break;
 			}
 			else if(trd.getRemainingVolume() >= t.getRemainingVolume()){
 				tradedOut.add(t);

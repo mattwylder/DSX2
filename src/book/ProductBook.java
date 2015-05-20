@@ -27,6 +27,8 @@ public class ProductBook {
 	
 	public ProductBook(String stockSymbol){
 		product = stockSymbol;
+		buySide = new ProductBookSide(this);
+		sellSide = new ProductBookSide(this);
 	}
 	
 	public synchronized ArrayList<TradableDTO> getOrdersWithRemainingQty(String userName){
@@ -163,7 +165,7 @@ public class ProductBook {
 		QuoteSide sellQuote = q.getQuoteSide("SELL");
 		Price buyPrice = q.getQuoteSide("BUY").getPrice();
 		Price sellPrice = q.getQuoteSide("SELL").getPrice();
-		if(buyPrice.lessOrEqual(sellPrice)){
+		if(sellPrice.lessOrEqual(buyPrice)){
 			throw new DataValidationException("That is an illegal Quote - Sell price must be greater than Buy price.");
 		}
 		if(buyPrice.lessOrEqual(PriceFactory.makeLimitPrice(0))){
@@ -196,7 +198,10 @@ public class ProductBook {
 	public synchronized void updateCurrentMarket(){
 		String mkt = "" + buySide.topOfBookPrice() + buySide.topOfBookVolume() +
 				sellSide.topOfBookPrice() + sellSide.topOfBookVolume();
-		if(!lastCurrentMarket.equals(mkt)){
+		if(lastCurrentMarket == null){
+			lastCurrentMarket = mkt;
+		}
+		else if(!lastCurrentMarket.equals(mkt)){
 			MarketDataDTO dto = new MarketDataDTO(product, buySide.topOfBookPrice(), buySide.topOfBookVolume(),
 					sellSide.topOfBookPrice(), sellSide.topOfBookVolume());
 			CurrentMarketPublisher.getInstance().publishCurrentMarket(dto);

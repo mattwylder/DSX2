@@ -13,10 +13,10 @@ public class Quote {
 	private String stockSymbol;
 	private QuoteSide buy;
 	private QuoteSide sell;
-	private long time = System.nanoTime();
+//	private long time = System.nanoTime();
 	private Price price;
 	private int originalVolume;
-	private int remainingVolume;
+//	private int remainingVolume;
 	private int cancelledVolume;
 	private String id;
 	
@@ -66,7 +66,12 @@ public class Quote {
 	}
 	
 	public QuoteSide getQuoteSide(String sideln){
-		return buy;
+		if(sideln.equals("BUY")){
+			return buy;
+		}
+		else{
+			return sell;
+		}
 	}
 	
 	public String toString(){
