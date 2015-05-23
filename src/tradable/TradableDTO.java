@@ -1,5 +1,6 @@
 package tradable;
 
+import message.InvalidDataOperation;
 import price.InvalidPriceOperation;
 import price.Price;
 
@@ -17,16 +18,61 @@ public class TradableDTO implements Tradable {
 	public boolean quote;
 	
 	public TradableDTO(String prdct, Price p, int oVolume, int rVolume,
-            int cVolume, String user, String bSide, boolean quoted, String i){
-		product = prdct;
-		price = p;
-		originalVolume = oVolume;
-		remainingVolume = rVolume;
-		cancelledVolume = cVolume;
-		userName = user;
-		side = bSide;
+            int cVolume, String user, String bSide, boolean quoted, String i) 
+            		throws InvalidDataOperation, InvalidPriceOperation{
+		setProduct(prdct);
+		setPrice(p);
+		setOriginalVolume(oVolume);
+		setRemainingVolume(rVolume);
+		setCancelledVolume(cVolume);
+		setUser(user);
+		setSide(bSide);
 		quote = quoted;
-		id = i;		
+		setId(i);
+	}
+	
+	private void setProduct(String stockSymbolIn)
+			throws InvalidDataOperation {
+		if(stockSymbolIn == null || stockSymbolIn.isEmpty()){
+			throw new InvalidDataOperation("Stock Symbol is null or the empty string");
+		}
+		product = stockSymbolIn;
+	}
+	
+	private void setUser(String userIn)
+			throws InvalidDataOperation {
+		if(userIn == null || userIn.isEmpty()){
+			throw new InvalidDataOperation("User is null or the empty string");
+		}
+		userName = userIn;
+	}
+	private void setPrice(Price priceIn)
+			throws InvalidDataOperation{
+		if(priceIn == null){
+			throw new InvalidDataOperation("Price is null");
+		}
+		price = priceIn;
+	}
+	
+	private void setOriginalVolume(int originalVolumeIn)
+			throws InvalidDataOperation{
+		if(originalVolumeIn < 1){
+			throw new InvalidDataOperation("Volume is less than 1");
+		}
+		originalVolume = originalVolumeIn;
+		remainingVolume = originalVolume;
+	}
+
+	private void setSide(String side) {
+		this.side = side;
+	}
+
+	private void setId(String IdIn)
+			throws InvalidDataOperation {
+		if(IdIn == null || IdIn.isEmpty()){
+			throw new InvalidDataOperation("User is null or the empty string");
+		}
+		id = IdIn;
 	}
 
 	public String getProduct() {

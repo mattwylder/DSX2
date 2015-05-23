@@ -3,6 +3,7 @@ package driver;
 
 import java.util.ArrayList;
 
+import message.InvalidDataOperation;
 import tradable.*;
 import price.*;
 
@@ -15,14 +16,14 @@ public class Phase1Main {
 
     private static final ArrayList<Price> testPriceHolder = new ArrayList<>();
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InvalidDataOperation, InvalidPriceOperation {
 
         testPrices();
         testTradables();
     }
 
     
-    private static void testTradables() {
+    private static void testTradables() throws InvalidDataOperation, InvalidPriceOperation {
 
         Tradable tradable1 = null;
         Quote quote1 = null;

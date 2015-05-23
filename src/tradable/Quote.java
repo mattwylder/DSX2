@@ -23,7 +23,7 @@ public class Quote {
 
 	public Quote(String userName, String productSymbol,
 			Price buyPrice, int buyVolume,
-			Price sellPrice, int sellVolume) throws Exception{
+			Price sellPrice, int sellVolume) throws InvalidDataOperation, InvalidPriceOperation{
 		if(buyVolume < 1 || sellVolume < 1){
 			throw new InvalidPriceOperation("Cannot have 0 or negative buy volume");
 		}
@@ -33,7 +33,7 @@ public class Quote {
 		sell = new QuoteSide(userName, productSymbol, sellPrice, sellVolume, SELL_SIDE);
 	}
 	
-	public void setUser(String userIn) 
+	private void setUser(String userIn) 
 			throws InvalidDataOperation {
 		if(userIn == null || userIn == null){
 			throw new InvalidDataOperation("Username is null or the empty string");
@@ -41,7 +41,7 @@ public class Quote {
 		user = userIn;
 	}
 	
-	public void setStockSymbol(String stockSymbolIn)
+	private void setStockSymbol(String stockSymbolIn)
 			throws InvalidDataOperation {
 		if(stockSymbolIn == null || stockSymbolIn.isEmpty()){
 			throw new InvalidDataOperation("Stock Symbol is null or the empty string");
@@ -49,11 +49,11 @@ public class Quote {
 		stockSymbol = stockSymbolIn;
 	}
 	
-	public void setBuy(){
+	private void setBuy(){
 		
 	}
 	
-	public void setSell(){
+	private void setSell(){
 		
 	}
 	

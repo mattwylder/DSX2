@@ -17,8 +17,7 @@ public class Order implements Tradable {
 	private boolean quote;
 
 	public Order(String userName, String productSymbol, Price orderPrice,
-			int oVolume, String bSide) throws Exception {
-		//TODO: Change all this to setMethods
+			int oVolume, String bSide) throws InvalidDataOperation {
 		setUser(userName);
 		setStockSymbol(productSymbol);
 		setPrice(orderPrice);
@@ -60,11 +59,11 @@ public class Order implements Tradable {
 		remainingVolume = originalVolume;
 	}
 
-	public void setSide(String side) {
+	private void setSide(String side) {
 		this.side = side;
 	}
 
-	public void setId() 
+	private void setId() 
 			throws InvalidDataOperation{
 		id = user + stockSymbol + price + time;
 	}

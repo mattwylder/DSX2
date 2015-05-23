@@ -31,7 +31,15 @@ public class ProductBook {
 		sellSide = new ProductBookSide(this, "SELL");
 	}
 	
-	public synchronized ArrayList<TradableDTO> getOrdersWithRemainingQty(String userName){
+	private void setProduct(String stockSymbolIn)
+			throws InvalidDataOperation {
+		if(stockSymbolIn == null || stockSymbolIn.isEmpty()){
+			throw new InvalidDataOperation("Stock Symbol is null or the empty string");
+		}
+		product = stockSymbolIn;
+	}
+	
+	public synchronized ArrayList<TradableDTO> getOrdersWithRemainingQty(String userName) throws InvalidDataOperation, InvalidPriceOperation{
 		ArrayList<TradableDTO> results = new ArrayList<TradableDTO>();
 		results.addAll(buySide.getOrdersWithRemainingQty(userName));
 		results.addAll(sellSide.getOrdersWithRemainingQty(userName));
@@ -110,7 +118,7 @@ public class ProductBook {
 		Price sellPrice = sellSide.topOfBookPrice();
 		ArrayList<Tradable> topOfBuySide = null;
 		HashMap<String, FillMessage> allFills = null;
-		ArrayList<Tradable> toRemove = null;
+		ArrayList<Tradable> toRemove = new ArrayList<Tradable>();
 		if(buyPrice == null || sellPrice == null){
 			return;
 		}
@@ -137,7 +145,7 @@ public class ProductBook {
 		}
 	}
 	
-	public synchronized void closeMarket(){
+	public synchronized void closeMarket() throws InvalidDataOperation, InvalidPriceOperation{
 		buySide.cancelAll();
 		sellSide.cancelAll();
 		updateCurrentMarket();
@@ -153,7 +161,7 @@ public class ProductBook {
 		updateCurrentMarket();
 	}
 	
-	public synchronized void cancelQuote(String userName){
+	public synchronized void cancelQuote(String userName) throws InvalidDataOperation, InvalidPriceOperation{
 		buySide.submitQuoteCancel(userName);
 		sellSide.submitQuoteCancel(userName);
 		updateCurrentMarket();

@@ -34,7 +34,7 @@ public class ProductService {
 		return instance;
 	}
 	
-	public synchronized ArrayList<TradableDTO> getOrdersWithRemainingQty(String userName, String product){
+	public synchronized ArrayList<TradableDTO> getOrdersWithRemainingQty(String userName, String product) throws InvalidDataOperation, InvalidPriceOperation{
 		return allBooks.get(product).getOrdersWithRemainingQty(userName);
 	}
 	
@@ -135,7 +135,7 @@ public class ProductService {
 	}
 	
 	public synchronized void submitQuoteCancel(String userName, String product)
-			throws InvalidMarketStateException, NoSuchProductException{
+			throws InvalidMarketStateException, NoSuchProductException, InvalidDataOperation, InvalidPriceOperation{
 		if(marketState.equals("CLOSED")){
 			throw new InvalidMarketStateException("Market is CLOSED, cannot submit order");
 		}

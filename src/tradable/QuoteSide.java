@@ -32,7 +32,7 @@ public class QuoteSide implements Tradable {
 
 	}
 	
-	public void setUser(String userIn) 
+	private void setUser(String userIn) 
 			throws InvalidDataOperation {
 		if(userIn == null || userIn == null){
 			throw new InvalidDataOperation("Username is null or the empty string");
@@ -40,7 +40,7 @@ public class QuoteSide implements Tradable {
 		user = userIn;
 	}
 	
-	public void setProduct(String stockSymbolIn)
+	private void setProduct(String stockSymbolIn)
 			throws InvalidDataOperation {
 		if(stockSymbolIn == null || stockSymbolIn.isEmpty()){
 			throw new InvalidDataOperation("Stock Symbol is null or the empty string");

@@ -31,7 +31,7 @@ public class ProductBookSide {
 		
 	}
 	
-	public synchronized ArrayList<TradableDTO> getOrdersWithRemainingQty(String userName){
+	public synchronized ArrayList<TradableDTO> getOrdersWithRemainingQty(String userName) throws InvalidDataOperation, InvalidPriceOperation{
 		ArrayList<TradableDTO> list = new ArrayList<TradableDTO>();
 
 		ArrayList<ArrayList<Tradable>> orders = new ArrayList<ArrayList<Tradable>>(bookEntries.values());
@@ -128,32 +128,36 @@ public class ProductBookSide {
 		return bookEntries.isEmpty();
 	}
 	
-	public synchronized void cancelAll(){
+	public synchronized void cancelAll() throws InvalidDataOperation, InvalidPriceOperation{
 		ArrayList<ArrayList<Tradable>> orders = new ArrayList<ArrayList<Tradable>>(bookEntries.values());
-		;
 		ArrayList<Tradable> tradables;
-//		for( int i = 0; i < orders.size(); i++){
-//			tradables = orders.get(i);
-//			for( int j = 0; j < tradables.size(); j++ ){
-//				submitOrderCancel(tradables.get(j).getId());
-//				submitQuoteCancel(tradables.get(j).getUser());
-//			}
-//		}
-		for(ArrayList<Tradable> lst : orders){
-			for(Tradable trd : lst){
-				submitOrderCancel(trd.getId());
-				submitQuoteCancel(trd.getUser());
+		for( int i = 0; i < orders.size(); i++){
+			tradables = orders.get(i);
+			for( int j = 0; j < tradables.size(); j++ ){
+				if(tradables.get(j).isQuote()){
+					submitQuoteCancel(tradables.get(j).getUser());
+				}
+				else{
+					submitOrderCancel(tradables.get(j).getId());
+				}
 			}
 		}
+		
+//		for(ArrayList<Tradable> lst : orders){
+//			for(Tradable trd : lst){
+//				if(trd.isQuote()){
+//					submitQuoteCancel(trd.getUser());
+//				}
+//				else{
+//					submitOrderCancel(trd.getId());
+//				}
+//			
+//			}
+//		}
 	}
 	
-	public synchronized TradableDTO removeQuote(String user){
+	public synchronized TradableDTO removeQuote(String user) throws InvalidDataOperation, InvalidPriceOperation{
 		ArrayList<ArrayList<Tradable>> orders = new ArrayList<ArrayList<Tradable>>(bookEntries.values());
-//		This method should search the book (the “bookEntries” HashMap) for a Quote from the specified user (a user
-//				can only have one Quote per product so there will either be none, or one). Once found, remove the Quote
-//				from the book, and create a TradableDTO using data from that QuoteSide, and return the DTO from the
-//				method. If no quote is found, return null. Note, if the Quote was the last Tradable in the ArrayList of Tradables
-//				at that price, remove the price entry from the “bookEntries” HashMap (i.e., bookEntries.remove(price) )
 		for(ArrayList<Tradable> lst : orders){
 			for(Tradable trd : lst){
 				if(trd.getUser().equals(user)){
@@ -199,7 +203,7 @@ public class ProductBookSide {
 		}
 	}
 	
-	public synchronized void submitQuoteCancel(String userName){
+	public synchronized void submitQuoteCancel(String userName) throws InvalidDataOperation, InvalidPriceOperation{
 		TradableDTO quote = removeQuote(userName);
 		if(quote != null){
 			try {
