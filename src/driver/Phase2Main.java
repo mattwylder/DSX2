@@ -2,6 +2,8 @@ package driver;
 
 import java.util.ArrayList;
 
+import book.InvalidMarketStateException;
+import book.NoSuchProductException;
 import price.*;
 import publisher.CurrentMarketPublisher;
 import publisher.LastSalePublisher;
@@ -337,12 +339,6 @@ public class Phase2Main {
 		}
 
 		@Override
-		public String submitOrder(String product, Price price, String orderId) {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
 		public void submitOrderCancel(String product, String side,
 				String orderId) {
 			// TODO Auto-generated method stub
@@ -448,6 +444,16 @@ public class Phase2Main {
 
 		@Override
 		public ArrayList<TradableDTO> getOrdersWithRemainingQty(String product) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String submitOrder(String product, Price price, int volume,
+				String side) throws InvalidDataOperation,
+				UserNotConnectedException, InvalidConnectionIdException,
+				InvalidMarketStateException, NoSuchProductException,
+				InvalidPriceOperation {
 			// TODO Auto-generated method stub
 			return null;
 		}

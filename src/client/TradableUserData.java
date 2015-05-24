@@ -50,8 +50,8 @@ public class TradableUserData {
 		if(sideIn == null || sideIn.isEmpty()){
 			throw new InvalidDataOperation("Side is null or empty string");
 		}
-		else if(!sideIn.equals("BUY") || !sideIn.equals("SELL")){
-			throw new InvalidDataOperation("Side is neither buy nor sell");
+		if(!sideIn.equals("BUY") && !sideIn.equals("SELL")){
+			throw new InvalidDataOperation("Side is neither buy nor sell, was " + sideIn);
 		}
 		side = sideIn;
 	}

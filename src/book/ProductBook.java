@@ -205,10 +205,11 @@ public class ProductBook {
 	public synchronized void updateCurrentMarket(){
 		String mkt = "" + buySide.topOfBookPrice() + buySide.topOfBookVolume() +
 				sellSide.topOfBookPrice() + sellSide.topOfBookVolume();
-		if(lastCurrentMarket == null){
-			lastCurrentMarket = mkt;
-		}
-		else if(!lastCurrentMarket.equals(mkt)){
+//		if(lastCurrentMarket == null){
+//			lastCurrentMarket = mkt;
+//		}
+//		else 
+			if(lastCurrentMarket == null || !lastCurrentMarket.equals(mkt)){
 			MarketDataDTO dto = new MarketDataDTO(product, buySide.topOfBookPrice(), buySide.topOfBookVolume(),
 					sellSide.topOfBookPrice(), sellSide.topOfBookVolume());
 			CurrentMarketPublisher.getInstance().publishCurrentMarket(dto);

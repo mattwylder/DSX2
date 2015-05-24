@@ -13,10 +13,8 @@ public class Quote {
 	private String stockSymbol;
 	private QuoteSide buy;
 	private QuoteSide sell;
-//	private long time = System.nanoTime();
 	private Price price;
 	private int originalVolume;
-//	private int remainingVolume;
 	private int cancelledVolume;
 	private String id;
 	

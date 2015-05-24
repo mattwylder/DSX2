@@ -28,7 +28,9 @@ public class UserImpl implements User{
 
 	public UserImpl(String userIn) throws InvalidDataOperation {
 		setUser(userIn);
+		ordersSubmitted = new ArrayList<TradableUserData>();
 		position = new Position();
+		//manager = new UserDisplayManager(this);
 	}
 
 	@Override
@@ -97,7 +99,7 @@ public class UserImpl implements User{
 	@Override
 	public void connect() 
 			throws AlreadyConnectedException, UserNotConnectedException, InvalidConnectionIdException {
-		UserCommandService.getInstance().connect(this);
+		connId = UserCommandService.getInstance().connect(this);
 		stocks = UserCommandService.getInstance().getProducts(userName, connId);
 	}
 

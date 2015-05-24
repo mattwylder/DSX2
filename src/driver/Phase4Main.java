@@ -6,7 +6,7 @@ import client.User;
 import client.UserImpl;
 import java.util.ArrayList;
 import price.PriceFactory;
-import product.ProductService;
+import book.ProductService;
 
 
 public class Phase4Main {
@@ -54,7 +54,7 @@ public class Phase4Main {
             System.out.println();
 
             System.out.println("F) Put the market in PREOPEN state");
-            ProductService.getInstance().setMarketState(<PREOPEN>);
+            ProductService.getInstance().setMarketState("PREOPEN");
             System.out.println();
 
             System.out.println("G) User ANN queries market state");
@@ -62,7 +62,7 @@ public class Phase4Main {
             System.out.println();
 
             System.out.println("H) Put the market in OPEN state");
-            ProductService.getInstance().setMarketState(<OPEN>);
+            ProductService.getInstance().setMarketState("OPEN");
             System.out.println();
 
             System.out.println("I) User RAJ queries market state");
@@ -82,7 +82,7 @@ public class Phase4Main {
 
 
             System.out.println(runCount + ".1) User REX submits an order for " + stock + ", BUY 100@40.00");
-            String rexO1 = users.get(0).submitOrder(stock, PriceFactory.makeLimitPrice("$40.00"), 100, <BUY>);
+            String rexO1 = users.get(0).submitOrder(stock, PriceFactory.makeLimitPrice("$40.00"), 100, "BUY");
             System.out.println();
 
             System.out.println(runCount + ".2) User ANN submits a quote for " + stock + ", 100@40.00 x 100@40.50");
@@ -91,7 +91,7 @@ public class Phase4Main {
 
 
             System.out.println(runCount + ".3) User RAJ submits an Order for " + stock + ", SELL 135@40.50");
-            String o2 = users.get(2).submitOrder(stock, PriceFactory.makeLimitPrice("$40.50"), 135, <SELL>);
+            String o2 = users.get(2).submitOrder(stock, PriceFactory.makeLimitPrice("$40.50"), 135, "SELL");
             System.out.println();
 
             System.out.println(runCount + ".4) User REX does a Book Depth query for " + stock);
@@ -111,7 +111,7 @@ public class Phase4Main {
             System.out.println();
 
             System.out.println(runCount + ".8) User REX cancels their order");
-            users.get(0).submitOrderCancel(stock, <BUY>, rexO1);
+            users.get(0).submitOrderCancel(stock, "BUY", rexO1);
             System.out.println();
 
             System.out.println(runCount + ".9) User ANN cancels their quote");
@@ -119,7 +119,7 @@ public class Phase4Main {
             System.out.println();
 
             System.out.println(runCount + ".10) User RAJ cancels their order");
-            users.get(2).submitOrderCancel(stock, <SELL>, o2);
+            users.get(2).submitOrderCancel(stock, "SELL", o2);
             System.out.println();
 
             System.out.println(runCount + ".11) Display position values for all users");
@@ -131,7 +131,7 @@ public class Phase4Main {
             System.out.println();
 
             System.out.println(runCount + ".12) User REX enters an order for " + stock + ", BUY 100@$10.00");
-            users.get(0).submitOrder(stock, PriceFactory.makeLimitPrice("$10.00"), 100, <BUY>);
+            users.get(0).submitOrder(stock, PriceFactory.makeLimitPrice("$10.00"), 100, "BUY");
             System.out.println();
 
             System.out.println(runCount + ".13) User ANN enters a quote for " + stock + ", 100@$10.00 x 100@10.10");
@@ -142,7 +142,7 @@ public class Phase4Main {
             String [][] st = users.get(2).getBookDepth(stock);
  
             
-            users.get(2).submitOrder(stock, PriceFactory.makeLimitPrice("$10.00"), 150, <SELL>);
+            users.get(2).submitOrder(stock, PriceFactory.makeLimitPrice("$10.00"), 150, "SELL");
             System.out.println();
 
             System.out.println(runCount + ".15) User REX does a Book Depth query for " + stock);
@@ -150,7 +150,7 @@ public class Phase4Main {
             System.out.println();
 
             System.out.println(runCount + ".16) User REX enters a market order for " + stock + ", SELL 75@MKT - results in a trade");
-            users.get(0).submitOrder(stock, PriceFactory.makeMarketPrice(), 75, <BUY>);
+            users.get(0).submitOrder(stock, PriceFactory.makeMarketPrice(), 75, "BUY");
             System.out.println();
 
             System.out.println(runCount + ".17) User ANN does a Book Depth query for " + stock);

@@ -506,7 +506,6 @@ public class Phase3Main {
 			
 		}
 
-		@Override
 		public String submitOrder(String product, Price price, String orderId) {
 			// TODO Auto-generated method stub
 			return null;
@@ -618,6 +617,16 @@ public class Phase3Main {
 
 		@Override
 		public ArrayList<TradableDTO> getOrdersWithRemainingQty(String product) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public String submitOrder(String product, Price price, int volume,
+				String side) throws InvalidDataOperation,
+				UserNotConnectedException, InvalidConnectionIdException,
+				InvalidMarketStateException, NoSuchProductException,
+				InvalidPriceOperation {
 			// TODO Auto-generated method stub
 			return null;
 		}
