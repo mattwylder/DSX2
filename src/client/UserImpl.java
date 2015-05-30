@@ -55,8 +55,8 @@ public class UserImpl implements User{
 	@Override
 	public void acceptMessage(FillMessage fm) {
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		String summary = stamp.toString() + "Fill Message: " + fm.getSide() + 
-				fm.getProduct() + " at " + fm.getPrice() + fm.getDetails() + "[Tradable ID: " + fm.getId() + "]";
+		String summary = "{" + stamp.toString() + "} Fill Message: " + fm.getSide() + " " + fm.getVolume() + " " +
+				fm.getProduct() + " at " + fm.getPrice() + " " + fm.getDetails() + " [Tradable ID: " + fm.getId() + "]\n";
 		manager.updateMarketActivity(summary);
 		try {
 			position.updatePosition(fm.getProduct(), fm.getPrice(), fm.getSide(), fm.getVolume());
@@ -69,8 +69,8 @@ public class UserImpl implements User{
 	@Override
 	public void acceptMessage(CancelMessage cm) {
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		String summary = stamp.toString() + "Fill Message: " + cm.getSide() + 
-				cm.getProduct() + " at " + cm.getPrice() + cm.getDetails() + "[Tradable ID: " + cm.getId() + "]";
+		String summary = "{" + stamp.toString() + "} Cancel Message: " + cm.getSide() + " " + cm.getVolume() + " " +
+				cm.getProduct() + " at " + cm.getPrice() + " " + cm.getDetails() + " [Tradable ID: " + cm.getId() + "]\n";
 		manager.updateMarketActivity(summary);
 		try {
 			position.updatePosition(cm.getProduct(), cm.getPrice(), cm.getSide(), cm.getVolume());
