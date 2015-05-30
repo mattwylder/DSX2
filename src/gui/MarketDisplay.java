@@ -5,6 +5,7 @@
 package gui;
 
 import client.User;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -14,6 +15,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -22,6 +24,7 @@ import javax.swing.JSeparator;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
+import price.InvalidPriceOperation;
 import price.Price;
 import price.PriceFactory;
 import book.ProductService;
@@ -157,7 +160,12 @@ public class MarketDisplay extends javax.swing.JFrame {
         jButton1.setText("Position");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                try {
+					jButton1ActionPerformed(evt);
+				} catch (InvalidPriceOperation e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
             }
         });
 
@@ -368,7 +376,7 @@ public class MarketDisplay extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_symbolComboActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) throws InvalidPriceOperation {//GEN-FIRST:event_jButton1ActionPerformed
         positionDisplay.updateAccountBalance(user.getAccountCosts());
         positionDisplay.updateStockValue(user.getAllStockValue());
         positionDisplay.updateAccountValue(user.getNetAccountValue());

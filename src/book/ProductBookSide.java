@@ -128,33 +128,22 @@ public class ProductBookSide {
 		return bookEntries.isEmpty();
 	}
 	
-	public synchronized void cancelAll() throws InvalidDataOperation, InvalidPriceOperation{
-		ArrayList<ArrayList<Tradable>> orders = new ArrayList<ArrayList<Tradable>>(bookEntries.values());
-		ArrayList<Tradable> tradables;
-		for( int i = 0; i < orders.size(); i++){
-			tradables = orders.get(i);
-			for( int j = 0; j < tradables.size(); j++ ){
-				if(tradables.get(j).isQuote()){
-					submitQuoteCancel(tradables.get(j).getUser());
-				}
-				else{
-					submitOrderCancel(tradables.get(j).getId());
-				}
-			}
-		}
-		
-//		for(ArrayList<Tradable> lst : orders){
-//			for(Tradable trd : lst){
-//				if(trd.isQuote()){
-//					submitQuoteCancel(trd.getUser());
-//				}
-//				else{
-//					submitOrderCancel(trd.getId());
-//				}
-//			
-//			}
-//		}
-	}
+    public synchronized void cancelAll() throws InvalidDataOperation, InvalidPriceOperation {
+        ArrayList<ArrayList<Tradable>> orders = new ArrayList<ArrayList<Tradable>>(bookEntries.values());
+        ArrayList<Tradable> tradables;
+        for (int i = 0; i < orders.size(); i++) {
+            tradables = new ArrayList<>(orders.get(i));
+
+            for (Tradable t : tradables) {
+                System.out.println(t.getPrice());
+                if (t.isQuote()) {
+                    submitQuoteCancel(t.getUser());
+                } else {
+                    submitOrderCancel(t.getId());
+                }
+            }
+        }
+    }
 	
 	public synchronized TradableDTO removeQuote(String user) throws InvalidDataOperation, InvalidPriceOperation{
 		ArrayList<ArrayList<Tradable>> orders = new ArrayList<ArrayList<Tradable>>(bookEntries.values());
@@ -196,7 +185,7 @@ public class ProductBookSide {
 					}
 					addOldEntry(curTradable);
 					if(tradables.isEmpty()){
-						orders.remove(i);
+						  bookEntries.remove(curTradable.getPrice());
 					}
 				}
 			}
