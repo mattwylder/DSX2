@@ -41,13 +41,16 @@ public class Position {
 				holdings.put(product, newVol);
 			}
 		}
-		Price totalPrice = price.multiply(volume);
-		if(side.equals("BUY")){
-			costs = costs.subtract(totalPrice);
+		if(!price.isMarket()){
+			Price totalPrice = price.multiply(volume);
+			if(side.equals("BUY")){
+				costs = costs.subtract(totalPrice);
+			}
+			else{
+				costs = costs.add(totalPrice);
+			}
 		}
-		else{
-			costs = costs.add(totalPrice);
-		}
+
 	}
 	
 	public void updateLastSale(String product, Price price){

@@ -76,7 +76,7 @@ public class ProductBookSide {
 			tradables = bookEntries.get(sorted.get(i));
 			for(int j = 0; j < tradables.size(); j++){
 				curTrade = tradables.get(j);
-				vol += curTrade.getRemainingVolume();
+				vol = curTrade.getRemainingVolume();
 			}
 			depth[i] = sorted.get(i) + " x " + vol;
 		}
@@ -280,11 +280,11 @@ public class ProductBookSide {
 			return new HashMap<String, FillMessage>(newOnes);
 		}
 		HashMap<String,FillMessage> results = new HashMap<>(existing);
-		for (String key : newOnes.keySet()) { // For each Trade Id key in the “newOnes” HashMap
-			if (!existing.containsKey(key)) { // If the “existing” HashMap does not have that key...
-				results.put(key, newOnes.get(key)); // ...then simply add this entry to the “results” HashMap
-			} else { // Otherwise, the “existing” HashMap does have that key – we need to update the data
-				FillMessage fm = results.get(key); // Get the FillMessage from the “results” HashMap
+		for (String key : newOnes.keySet()) { // For each Trade Id key in the â€œnewOnesâ€� HashMap
+			if (!existing.containsKey(key)) { // If the â€œexistingâ€� HashMap does not have that key...
+				results.put(key, newOnes.get(key)); // ...then simply add this entry to the â€œresultsâ€� HashMap
+			} else { // Otherwise, the â€œexistingâ€� HashMap does have that key â€“ we need to update the data
+				FillMessage fm = results.get(key); // Get the FillMessage from the â€œresultsâ€� HashMap
 				try {
 					fm.setVolume(newOnes.get(key).getVolume());
 				} catch (InvalidDataOperation e) {
