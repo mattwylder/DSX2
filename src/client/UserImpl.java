@@ -72,12 +72,6 @@ public class UserImpl implements User{
 		String summary = "{" + stamp.toString() + "} Cancel Message: " + cm.getSide() + " " + cm.getVolume() + " " +
 				cm.getProduct() + " at " + cm.getPrice() + " " + cm.getDetails() + " [Tradable ID: " + cm.getId() + "]\n";
 		manager.updateMarketActivity(summary);
-		try {
-			position.updatePosition(cm.getProduct(), cm.getPrice(), cm.getSide(), cm.getVolume());
-		} catch (InvalidPriceOperation e) {
-			System.out.println(e);
-			e.printStackTrace();
-		}
 	}
 
 	@Override
