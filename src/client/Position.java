@@ -89,8 +89,12 @@ public class Position {
 		ArrayList<String> products = new ArrayList<String>(holdings.keySet());
 		Iterator<String> itr = products.iterator();
 		Price tmp = PriceFactory.makeLimitPrice(0);
+		String next;
 		while(itr.hasNext()){
-			tmp.add(getStockPositionValue(itr.next()));
+			next = itr.next();
+//			System.out.println(next);
+//			System.out.println(getStockPositionValue(next));
+			tmp = tmp.add(getStockPositionValue(next));
 		}
 		return tmp;
 	}

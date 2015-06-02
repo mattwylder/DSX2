@@ -41,7 +41,7 @@ public class ProductBookSide {
 			tradables = orders.get(i);
 			for(int j = 0; j < tradables.size(); j++){
 				curTrade = tradables.get(j);
-				if(curTrade.getUser().equals(userName) && curTrade.getRemainingVolume() > 0){
+				if( !curTrade.isQuote() && curTrade.getUser().equals(userName) && curTrade.getRemainingVolume() > 0){
 					list.add(new TradableDTO(curTrade.getProduct(), curTrade.getPrice(), curTrade.getOriginalVolume(),
 							curTrade.getRemainingVolume(),curTrade.getCancelledVolume(), curTrade.getUser(), 
 							curTrade.getSide(), curTrade.isQuote(), curTrade.getId()));
@@ -76,7 +76,7 @@ public class ProductBookSide {
 			tradables = bookEntries.get(sorted.get(i));
 			for(int j = 0; j < tradables.size(); j++){
 				curTrade = tradables.get(j);
-				vol = curTrade.getRemainingVolume();
+				vol += curTrade.getRemainingVolume();
 			}
 			depth[i] = sorted.get(i) + " x " + vol;
 		}

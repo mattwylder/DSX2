@@ -135,7 +135,7 @@ public class QuoteSide implements Tradable {
 	}
 
 	public boolean isQuote() {
-		return false;
+		return true;
 	}
 
 	public String getId() {

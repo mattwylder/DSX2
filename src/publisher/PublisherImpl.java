@@ -9,14 +9,12 @@ import client.User;
 
 public class PublisherImpl implements Publisher {
 
+	protected Map<String, User> uniqueUsers;
 	protected Map<String, ArrayList<User>> subscriptions;
 
 	protected PublisherImpl() {
 		subscriptions = new HashMap<String, ArrayList<User>>();
-	}
-
-	public Map<String, ArrayList<User>> getSubscriptions() {
-		return subscriptions;
+		uniqueUsers = new HashMap<String, User>();
 	}
 
 	public synchronized void subscribe(User u, String product)
@@ -31,6 +29,9 @@ public class PublisherImpl implements Publisher {
 				}
 			}
 			subscribers.add(u);
+			if(!uniqueUsers.containsKey(u.getUserName())){
+				uniqueUsers.put(u.getUserName(), u);
+			}
 		} else {
 			subscriptions.put(product, new ArrayList<User>());
 			subscriptions.get(product).add(u);

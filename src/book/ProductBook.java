@@ -25,8 +25,8 @@ public class ProductBook {
 	private HashSet<String> userQuotes = new HashSet<>();
 	private HashMap<Price, ArrayList<Tradable>> oldEntries = new HashMap<Price, ArrayList<Tradable>>();
 	
-	public ProductBook(String stockSymbol){
-		product = stockSymbol;
+	public ProductBook(String stockSymbol) throws InvalidDataOperation{
+		setProduct(stockSymbol);
 		buySide = new ProductBookSide(this, "BUY");
 		sellSide = new ProductBookSide(this, "SELL");
 	}

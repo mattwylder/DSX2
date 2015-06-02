@@ -57,13 +57,19 @@ public class MessagePublisher extends PublisherImpl{
 	}
 	
 	public synchronized void publishMarketMessage(MarketMessage message){
-		Iterator<ArrayList<User>> i = subscriptions.values().iterator();
-		Iterator<User> j;
-		while(i.hasNext()){
-			j = i.next().iterator();
-			while(j.hasNext()){
-				j.next().acceptMarketMessage(message.toString());
-			}
+//		Iterator<ArrayList<User>> i = subscriptions.values().iterator();
+//		Iterator<User> j;
+//		
+//		while(i.hasNext()){
+//			j = i.next().iterator();
+//			while(j.hasNext()){
+//				j.next().acceptMarketMessage(message.toString());
+//			}
+//		}
+		
+		Iterator<User> users = new ArrayList<User>(uniqueUsers.values()).iterator();
+		while(users.hasNext()){
+			users.next().acceptMarketMessage(message.toString());
 		}
 	}
 	

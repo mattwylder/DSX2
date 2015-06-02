@@ -30,7 +30,6 @@ public class UserImpl implements User{
 		setUser(userIn);
 		ordersSubmitted = new ArrayList<TradableUserData>();
 		position = new Position();
-		//manager = new UserDisplayManager(this);
 	}
 
 	@Override

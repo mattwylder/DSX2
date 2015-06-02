@@ -82,7 +82,7 @@ public class ProductService {
 	}
 	
 	public synchronized void createProduct(String product)
-			throws DataValidationException, ProductAlreadyExistsException{
+			throws DataValidationException, ProductAlreadyExistsException, InvalidDataOperation{
 		if(product == null || product.isEmpty()){
 			throw new DataValidationException("Null or empty product name");
 		}
