@@ -47,7 +47,9 @@ public class UserImpl implements User{
 
 	@Override
 	public void acceptLastSale(String product, Price p, int v) {
-		manager.updateLastSale(product, p, v);
+		if(manager != null){
+			manager.updateLastSale(product, p, v);
+		}
 		position.updateLastSale(product, p);
 	}
 
@@ -56,7 +58,9 @@ public class UserImpl implements User{
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
 		String summary = "{" + stamp.toString() + "} Fill Message: " + fm.getSide() + " " + fm.getVolume() + " " +
 				fm.getProduct() + " at " + fm.getPrice() + " " + fm.getDetails() + " [Tradable ID: " + fm.getId() + "]\n";
-		manager.updateMarketActivity(summary);
+		if(manager != null){
+			manager.updateMarketActivity(summary);
+		}
 		try {
 			position.updatePosition(fm.getProduct(), fm.getPrice(), fm.getSide(), fm.getVolume());
 		} catch (InvalidPriceOperation e) {
@@ -70,23 +74,31 @@ public class UserImpl implements User{
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
 		String summary = "{" + stamp.toString() + "} Cancel Message: " + cm.getSide() + " " + cm.getVolume() + " " +
 				cm.getProduct() + " at " + cm.getPrice() + " " + cm.getDetails() + " [Tradable ID: " + cm.getId() + "]\n";
-		manager.updateMarketActivity(summary);
+		if(manager != null){
+			manager.updateMarketActivity(summary);
+		}
 	}
 
 	@Override
 	public void acceptTicker(String product, Price p, char direction) {
-		manager.updateTicker(product, p, direction);
+		if(manager != null){
+			manager.updateTicker(product, p, direction);
+		}
 	}
 
 	@Override
 	public void acceptCurrentMarket(String product, Price bp, int bv, Price sp,
 			int sv) {
-		manager.updateMarketData(product, bp, bv, sp, sv);
+		if(manager != null){
+			manager.updateMarketData(product, bp, bv, sp, sv);
+		}
 	}
 
 	@Override
 	public void acceptMarketMessage(String message) {
-		manager.updateMarketState(message);
+		if(manager != null){
+			manager.updateMarketState(message);
+		}
 	}
 
 	@Override
